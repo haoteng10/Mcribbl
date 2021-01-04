@@ -1,0 +1,9 @@
+name: Mcribbl
+version: ${project.version}
+main: xyz.haoteng.mcribbl.Mcribbl
+api-version: 1.16
+authors: [ HaoTeng ]
+website: haoteng.xyz
+commands:
+  inv:
+    description: test
