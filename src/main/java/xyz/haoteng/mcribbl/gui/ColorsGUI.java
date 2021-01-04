@@ -7,10 +7,10 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-public class ColorGUI implements InventoryHolder {
+public class ColorsGUI implements InventoryHolder {
     private final Inventory inv;
 
-    public ColorGUI() {
+    public ColorsGUI() {
         inv = Bukkit.createInventory(this, 9, "Colors");
         // Put the items into the inventory
         ItemStack[] allWools = {

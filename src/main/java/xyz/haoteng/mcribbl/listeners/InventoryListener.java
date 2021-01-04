@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import xyz.haoteng.mcribbl.commands.ColorCommand;
-import xyz.haoteng.mcribbl.gui.ColorGUI;
+import xyz.haoteng.mcribbl.gui.ColorsGUI;
 
 public class InventoryListener implements Listener {
     @EventHandler
@@ -15,12 +15,12 @@ public class InventoryListener implements Listener {
         Player player = (Player) e.getWhoClicked();
         ItemStack item = e.getCurrentItem();
 
-        if (item == null || item.getType() == null) return;
+        if (item == null) return;
 
-        if (e.getClickedInventory().getHolder() instanceof ColorGUI) {
+        if (e.getClickedInventory().getHolder() instanceof ColorsGUI) {
             e.setCancelled(true);
             ColorCommand.selectedColorBlock = item;
-            player.sendMessage(ChatColor.GOLD + "Awesome!");
+            player.sendMessage(ChatColor.GOLD + "Material Changed to " + item.getType());
         }
 
     }
