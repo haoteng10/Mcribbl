@@ -7,3 +7,5 @@ website: haoteng.xyz
 commands:
   color:
     description: modify the color
+  start:
+    description: start drawing
