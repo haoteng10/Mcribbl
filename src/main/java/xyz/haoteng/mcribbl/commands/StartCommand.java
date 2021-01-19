@@ -37,6 +37,8 @@ public class StartCommand implements CommandExecutor {
 
         PlayerMoveListener.toggleEnabled();
 
+        VoteCommand.initVoting(player);
+
         return true;
     }
 

@@ -5,8 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import java.util.ArrayList;
-
 public class Rectangle {
     private final int xMin;
     private final int xMax;
@@ -18,6 +16,19 @@ public class Rectangle {
     private final World world;
 
     private Block[] blockArray;
+
+    @Override
+    public String toString() {
+        return "Rectangle{" +
+                "xMin=" + xMin +
+                ", xMax=" + xMax +
+                ", yMin=" + yMin +
+                ", yMax=" + yMax +
+                ", zValue=" + zValue +
+                ", world=" + world +
+                ", totalBlocks=" + blockArray.length +
+                '}';
+    }
 
     public Rectangle(final Location loc1, final Location loc2){
         this.xMin = Math.min(loc1.getBlockX(),loc2.getBlockX());
@@ -58,20 +69,4 @@ public class Rectangle {
             block.setType(targetMaterial, applyPhysics);
         }
     }
-
-//    public int getxMax() {
-//        return xMax;
-//    }
-//
-//    public int getxMin() {
-//        return xMin;
-//    }
-//
-//    public int getyMax() {
-//        return yMax;
-//    }
-//
-//    public int getyMin() {
-//        return yMin;
-//    }
 }
