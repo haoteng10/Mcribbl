@@ -8,6 +8,10 @@ commands:
   color:
     description: modify the color
   start:
-    description: start drawing
+    description: start drawing & voting
   vote:
     description: vote drawing
+  rating:
+    description: view voting results
+  end:
+    description: stop drawing & voting

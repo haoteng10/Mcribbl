@@ -1,5 +1,7 @@
 package xyz.haoteng.mcribbl.models;
 
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -39,16 +41,14 @@ public class Score {
     }
 
     /**
-     * @custom.precondition
-     * scoreCasts instance variable has a length of greater than or equal to 0.
-     * @custom.postcondition
-     * 0 <= return value <= scoreCasts.length.
+     * Precondition:
+     * scoreCasts instance variable has a length of greater than 0.
+     * Postcondition:
+     * returns a value in the array
      * @return the mode of the scores in scoreCasts array
      */
     public int modeScore(){
         convertListToArray();
-
-        if (scoreCasts.length == 0) return 0;
 
         int currentMode = scoreCasts[0];
         int currentModeOccurrences = 1;
@@ -65,5 +65,48 @@ public class Score {
         }
 
         return currentMode;
+    }
+
+    public int maxCastScore(){
+        convertListToArray();
+
+        if (scoreCasts.length == 0) return -1;
+
+        int currentMax = scoreCasts[0];
+        for (int number : scoreCasts){
+            if (number > currentMax) currentMax = number;
+        }
+        return currentMax;
+    }
+
+    public int minCastScore(){
+        convertListToArray();
+
+        if (scoreCasts.length == 0) return -1;
+
+        int currentMin = scoreCasts[0];
+        for (int number : scoreCasts){
+            if (number < currentMin) currentMin = number;
+        }
+        return currentMin;
+    }
+
+    public Player getHolder() {
+        return holder;
+    }
+
+    public void printScore(CommandSender sender){
+        sender.sendMessage(String.valueOf(this));
+    }
+
+    @Override
+    public String toString() {
+        String playerNameString = ChatColor.GREEN + "Player: " + holder.getName();
+        String averageScoreString = ChatColor.GOLD + "Current average score is " + ChatColor.BOLD + this.averageScore();
+        String currentModeString = ChatColor.GOLD + "Current mode score is " + ChatColor.BOLD + this.modeScore();
+        String totalScoreString = ChatColor.GOLD + "Total score is " + ChatColor.BOLD + this.getTotalScore();
+        String minMaxScoreString = ChatColor.GOLD + "Min: " + this.minCastScore() + "Max: " + this.maxCastScore();
+
+        return  playerNameString + "\n" + averageScoreString + "\n" + currentModeString + "\n" + minMaxScoreString + "\n" + totalScoreString;
     }
 }

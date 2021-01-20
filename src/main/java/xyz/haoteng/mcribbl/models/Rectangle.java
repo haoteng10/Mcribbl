@@ -31,10 +31,10 @@ public class Rectangle {
     }
 
     public Rectangle(final Location loc1, final Location loc2){
-        this.xMin = Math.min(loc1.getBlockX(),loc2.getBlockX());
-        this.xMax = Math.max(loc1.getBlockX(),loc2.getBlockX());
-        this.yMin = Math.min(loc1.getBlockY(),loc2.getBlockY());
-        this.yMax = Math.max(loc1.getBlockY(),loc2.getBlockY());
+        this.xMin = min(loc1.getBlockX(),loc2.getBlockX());
+        this.xMax = max(loc1.getBlockX(),loc2.getBlockX());
+        this.yMin = min(loc1.getBlockY(),loc2.getBlockY());
+        this.yMax = max(loc1.getBlockY(),loc2.getBlockY());
         this.world = loc1.getWorld();
         this.zValue = loc1.getBlockZ();
         this.blockArray = new Block[getTotalBlocks()];
@@ -67,6 +67,22 @@ public class Rectangle {
     public void changeAllMaterial(Material targetMaterial, boolean applyPhysics){
         for (Block block : blockArray){
             block.setType(targetMaterial, applyPhysics);
+        }
+    }
+
+    private int min(int one, int two){
+        if (one < two){
+            return one;
+        } else {
+            return two;
+        }
+    }
+
+    private int max(int one, int two){
+        if (one > two){
+            return one;
+        } else {
+            return two;
         }
     }
 }
