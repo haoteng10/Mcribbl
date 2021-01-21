@@ -3,7 +3,6 @@ package xyz.haoteng.mcribbl.models;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import sun.tools.jconsole.JConsole;
 
 import java.util.ArrayList;
 import java.util.List;

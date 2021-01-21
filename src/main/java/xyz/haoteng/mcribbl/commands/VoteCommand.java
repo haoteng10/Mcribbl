@@ -60,7 +60,7 @@ public class VoteCommand implements CommandExecutor {
         //Notify all players that drawing & voting is starting
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
         for (Player iPlayer : players){
-            iPlayer.sendMessage(ChatColor.GOLD + "Voting starts now!" + ChatColor.AQUA + "\nPlease rank from 1 (worst) to 5 (best)" + ChatColor.DARK_AQUA + "\n/vote [1 to 5]");
+            iPlayer.sendMessage(ChatColor.DARK_GREEN + ">>> " + ChatColor.GOLD + "Voting starts now! \n" + ChatColor.DARK_GREEN + ">>> " + ChatColor.AQUA + "Please rank from 1 (worst) to 5 (best)" + ChatColor.DARK_AQUA + "\n/vote [1 to 5]");
         }
 
         currentPlayerScore = new Score(player);
@@ -72,8 +72,8 @@ public class VoteCommand implements CommandExecutor {
         //Notify all players that drawing & voting is over
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
         for (Player iPlayer : players){
-            iPlayer.sendMessage(ChatColor.GOLD + "Voting ends!");
-            iPlayer.sendMessage(ChatColor.AQUA + "Check player's rating via " + ChatColor.GOLD + "/rating " + ChatColor.AQUA + "command");
+            iPlayer.sendMessage(ChatColor.DARK_GREEN + ">>> " + ChatColor.GOLD + "Voting ends!");
+            iPlayer.sendMessage(ChatColor.DARK_GREEN + ">>> " + ChatColor.AQUA + "Check player's rating via " + ChatColor.GOLD + "/rating " + ChatColor.AQUA + "command");
         }
 
         //Add the score to the global ratings
