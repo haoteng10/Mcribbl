@@ -19,21 +19,48 @@ public class RatingCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // /rating player [player name]
-        if (args.length == 2 && args[0].equals("player")){
+        if (args.length == 2 && args[0].equals("player")) {
             if (getPlayerScoreFromList(args[1]) != null) {
-                displayPlayerScore(args[1], sender);
+                Score playerScore = getPlayerScoreFromList(args[1]);
+                displayPlayerScore(playerScore, sender);
             } else {
                 sendInvalidMessage(sender);
                 return false;
             }
-            // /rating
-        } else if (args.length == 0){
+        }
+
+        // /rating player [player name] has [integer]
+        if (args.length == 4 && args[0].equals("player") && args[2].equals("has")){
+            int check;
+            try {
+                check = Integer.parseInt(args[3]);
+            } catch (Exception e){
+                Message invUsg = new Message();
+                invUsg.setCommandTemplate("/rating player [player name] has [1-digit integer]");
+                invUsg.displayError(sender, 1);
+                return false;
+            }
+
+            if (getPlayerScoreFromList(args[1]) != null && check < 10 && check >= 0) {
+                Score playerScore = getPlayerScoreFromList(args[1]);
+                boolean hasTargetInt = playerScore.scoreHasCertainDigit(check);
+                sender.sendMessage("" + ChatColor.GOLD + ChatColor.BOLD + check + ChatColor.RESET + ChatColor.GOLD + " is one of the digit(s) in the final score: " + ChatColor.DARK_AQUA + hasTargetInt);
+            } else {
+                Message invUsg = new Message();
+                invUsg.setCommandTemplate("/rating player [player name] has [1-digit integer]");
+                invUsg.displayError(sender, 1);
+                return false;
+            }
+        }
+
+        // /rating
+        if (args.length == 0){
 
             if (!(sender instanceof Player)) return false;
 
             Player player = (Player) sender;
             if (getPlayerScoreFromList(player.getName()) != null){
-                displayPlayerScore(player.getName(), player);
+                displayPlayerScore(getPlayerScoreFromList(player.getName()), player);
             } else {
                 sendInvalidMessage(player);
                 return false;
@@ -43,8 +70,7 @@ public class RatingCommand implements CommandExecutor {
         return true;
     }
 
-    private void displayPlayerScore(String playerName, CommandSender sender){
-        Score playerScore = getPlayerScoreFromList(playerName);
+    private void displayPlayerScore(Score playerScore, CommandSender sender){
         playerScore.printScore(sender);
     }
 
@@ -53,12 +79,13 @@ public class RatingCommand implements CommandExecutor {
     }
 
     public static Score getPlayerScoreFromList(String playerName){
+        Score latestScore = null;
         for (Score score : allScores){
             if (score.getHolder().getName().equals(playerName)){
-                return score;
+                latestScore = score;
             }
         }
-        return null;
+        return latestScore;
     }
 
     private void sendInvalidMessage(CommandSender sender){

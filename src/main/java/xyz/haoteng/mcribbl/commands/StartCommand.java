@@ -1,5 +1,6 @@
 package xyz.haoteng.mcribbl.commands;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -10,7 +11,18 @@ import org.bukkit.entity.Player;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rectangle;
 
+import java.util.Arrays;
+
 public class StartCommand implements CommandExecutor {
+
+    private static String[] prompts = {
+            "Apple",
+            "Watermelon",
+            "Car",
+            "Stick Figure",
+            "School"
+    };
+
     /**
      * Executes the given command, returning its success.
      * <br>
@@ -39,6 +51,9 @@ public class StartCommand implements CommandExecutor {
 
         VoteCommand.initVoting(player);
 
+        String[] twoPrompts = shuffleAndGetPrompts();
+        player.sendMessage(ChatColor.GREEN + "Draw: " + ChatColor.GRAY + twoPrompts[0] + ChatColor.GOLD + " or " + ChatColor.GRAY + twoPrompts[1]);
+
         return true;
     }
 
@@ -46,5 +61,44 @@ public class StartCommand implements CommandExecutor {
         Block bottomLeftCorner = playerLocation.getWorld().getBlockAt(playerLocation.getBlockX() - size, playerLocation.getBlockY() - size, playerLocation.getBlockZ() + zOffset);
         Block topRightCorner = playerLocation.getWorld().getBlockAt(playerLocation.getBlockX() + size, playerLocation.getBlockY() + size, playerLocation.getBlockZ() + zOffset);
         return new Block[]{bottomLeftCorner, topRightCorner};
+    }
+
+    public String[] shuffleAndGetPrompts(){
+        //Not real shuffle
+        reversesPrompts();
+        shiftPromptsLeft();
+        String[][] pairs = getAllConsecutivePairs();
+        int rand = (int)(Math.random() * pairs.length);
+        return pairs[rand];
+    }
+
+    public static void shiftPromptsLeft(){
+        String[] result = new String[prompts.length];
+        for (int i = 0; i < prompts.length - 1; i++){
+            result[i] = prompts[i+1];
+        }
+        result[prompts.length-1] = prompts[0];
+        prompts = result;
+    }
+
+    public static void reversesPrompts(){
+        String[] result = new String[prompts.length];
+        int counter = 0;
+        int reverseCounter = prompts.length-1;
+        while (counter < prompts.length){
+            result[counter] = prompts[reverseCounter];
+            counter++;
+            reverseCounter--;
+        }
+        prompts = result;
+    }
+
+    public static String[][] getAllConsecutivePairs(){
+        String[][] result = new String[prompts.length-1][2];
+        for (int i = 0; i < prompts.length-1; i++){
+            result[i][0] = prompts[i];
+            result[i][1] = prompts[i+1];
+        }
+        return result;
     }
 }

@@ -10,7 +10,7 @@ import xyz.haoteng.mcribbl.helpers.Message;
 import xyz.haoteng.mcribbl.models.Score;
 
 public class VoteCommand implements CommandExecutor {
-    private static boolean enabled = false;
+    public static boolean enabled = false;
     public static Score currentPlayerScore;
 
     @Override
@@ -73,6 +73,7 @@ public class VoteCommand implements CommandExecutor {
         Player[] players = Bukkit.getServer().getOnlinePlayers().toArray(new Player[0]);
         for (Player iPlayer : players){
             iPlayer.sendMessage(ChatColor.GOLD + "Voting ends!");
+            iPlayer.sendMessage(ChatColor.AQUA + "Check player's rating via " + ChatColor.GOLD + "/rating " + ChatColor.AQUA + "command");
         }
 
         //Add the score to the global ratings
