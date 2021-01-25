@@ -5,6 +5,7 @@ A Minecraft Plugin that that allows the players to draw an assigned item and vot
 ## Features
 1. Color Picker
 2. Ratings System
+3. Cursor Preview
 
 # Commands
 `/start` To start the drawing and voting session <br />
