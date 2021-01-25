@@ -11,6 +11,7 @@ public class ColorsGUI implements InventoryHolder {
     private final Inventory inv;
 
     public ColorsGUI() {
+        // Construct the Inventory
         inv = Bukkit.createInventory(this, 9, "Colors");
         // Put the items into the inventory
         ItemStack[] allWools = {
@@ -25,6 +26,7 @@ public class ColorsGUI implements InventoryHolder {
                 new ItemStack(Material.LIGHT_GRAY_WOOL)
         };
 
+        // Take all of the items and put it inside the Inventory
         for (int i = 0; i < allWools.length; i++){
             inv.setItem(i, allWools[i]);
         }

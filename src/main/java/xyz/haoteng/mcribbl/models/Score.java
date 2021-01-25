@@ -41,10 +41,14 @@ public class Score {
     }
 
     /**
+     * <p>
      * Precondition: </br>
-     * scoreCasts instance variable has a length of greater than 0. </br>
+     * scoreCasts instance variable has a length of greater than 0.
+     * </p>
+     * <p>
      * Postcondition: </br>
-     * returns a value in the array
+     * returns an integer value
+     * </p>
      * @return the mode of the scores in scoreCasts array
      */
     public int modeScore(){

@@ -29,6 +29,8 @@ public final class Mcribbl extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        //Disable the voting command
         VoteCommand.enabled = false;
 
         // Plugin shutdown logic

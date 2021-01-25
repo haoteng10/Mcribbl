@@ -14,9 +14,13 @@ public class EndCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
+        //End the voting session
         VoteCommand.endVoting();
+
+        //End the player cursor
         PlayerMoveListener.toggleEnabled();
 
+        //If the commander is a player, spawn some fireworks!!!
         if (sender instanceof Player){
             Player player = (Player) sender;
             Location playerLocation = player.getLocation();

@@ -18,7 +18,7 @@ public class RatingCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        // /rating player [player name]
+        // Command that looks like this --> /rating player [player name]
         if (args.length == 2 && args[0].equals("player")) {
             if (getPlayerScoreFromList(args[1]) != null) {
                 Score playerScore = getPlayerScoreFromList(args[1]);
@@ -29,7 +29,7 @@ public class RatingCommand implements CommandExecutor {
             }
         }
 
-        // /rating player [player name] has [integer]
+        // Command that looks like this --> /rating player [player name] has [integer]
         if (args.length == 4 && args[0].equals("player") && args[2].equals("has")){
             int check;
             try {
@@ -53,7 +53,7 @@ public class RatingCommand implements CommandExecutor {
             }
         }
 
-        // /rating
+        // Command that looks like this --> /rating
         if (args.length == 0){
 
             if (!(sender instanceof Player)) return false;

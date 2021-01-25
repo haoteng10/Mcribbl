@@ -11,8 +11,6 @@ import org.bukkit.entity.Player;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rectangle;
 
-import java.util.Arrays;
-
 public class StartCommand implements CommandExecutor {
 
     private static String[] prompts = {
@@ -43,20 +41,31 @@ public class StartCommand implements CommandExecutor {
 
         Player player = (Player) sender;
 
+        //Get CornerBlocks & Setup Drawing Board
         Block[] cornerBlocks = getTwoCornerBlocks(player.getLocation(), 5, 10);
         Rectangle boardArea = new Rectangle(cornerBlocks[0].getLocation(), cornerBlocks[1].getLocation());
         boardArea.changeAllMaterial(Material.QUARTZ_BLOCK, false);
 
+        //Setup Player Cursor
         PlayerMoveListener.toggleEnabled();
 
+        //Start Voting Process
         VoteCommand.initVoting(player);
 
+        //Give the player two prompts to choose from
         String[] twoPrompts = shuffleAndGetPrompts();
         player.sendMessage(ChatColor.GREEN + "Draw: " + ChatColor.GRAY + twoPrompts[0] + ChatColor.GOLD + " or " + ChatColor.GRAY + twoPrompts[1]);
 
         return true;
     }
 
+
+    /**
+     * @param playerLocation Location of the player
+     * @param zOffset Blocks away from the player in the z direction
+     * @param size The size of the board (symmetrical)
+     * @return Block[] with block for the bottom-left corner and top-right corner
+     */
     private Block[] getTwoCornerBlocks(Location playerLocation, int zOffset, int size){
         Block bottomLeftCorner = playerLocation.getWorld().getBlockAt(playerLocation.getBlockX() - size, playerLocation.getBlockY() - size, playerLocation.getBlockZ() + zOffset);
         Block topRightCorner = playerLocation.getWorld().getBlockAt(playerLocation.getBlockX() + size, playerLocation.getBlockY() + size, playerLocation.getBlockZ() + zOffset);
