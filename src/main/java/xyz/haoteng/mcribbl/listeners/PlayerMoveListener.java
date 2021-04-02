@@ -21,18 +21,23 @@ public class PlayerMoveListener implements Listener {
     public void onPlayerMove(PlayerMoveEvent e){
         Player player = e.getPlayer();
         Block targetedBlock = player.getTargetBlock(null, 20);
+
+        //If cursor is enabled and the targeted block is not air
         if (enabled && targetedBlock.getType() != Material.AIR) {
 
+            //If there is a previous targeted block, restore the material back to its original form
             if (prevBlockMaterial != null) {
                 Block prevBlock = Bukkit.getWorld("world").getBlockAt(prevBlockLoc[0], prevBlockLoc[1], prevBlockLoc[2]);
                 prevBlock.setType(prevBlockMaterial);
             }
 
+            //Save the current targetedBlock as a previousBlock to prepare for restoration once the cursor moves
             prevBlockMaterial = targetedBlock.getType();
             prevBlockLoc[0] = targetedBlock.getX();
             prevBlockLoc[1] = targetedBlock.getY();
             prevBlockLoc[2] = targetedBlock.getZ();
 
+            //Set the targetedBlock as the selectedBlock as a preview
             targetedBlock.setType(ColorCommand.selectedColorBlock.getType());
         }
     }

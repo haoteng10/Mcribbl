@@ -12,7 +12,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public class ColorsGUI implements InventoryHolder {
     private final Inventory inv;
-    private static int page;
+
+    public static int page;
 
     private final ItemStack[] allWools = {
             new ItemStack(Material.WHITE_WOOL),
@@ -50,6 +51,24 @@ public class ColorsGUI implements InventoryHolder {
             new ItemStack(Material.RED_TERRACOTTA),
             new ItemStack(Material.BLACK_TERRACOTTA)
     };
+    private final ItemStack[] allConcretes = {
+            new ItemStack(Material.WHITE_CONCRETE),
+            new ItemStack(Material.ORANGE_CONCRETE),
+            new ItemStack(Material.MAGENTA_CONCRETE),
+            new ItemStack(Material.LIGHT_BLUE_CONCRETE),
+            new ItemStack(Material.YELLOW_CONCRETE),
+            new ItemStack(Material.LIME_CONCRETE),
+            new ItemStack(Material.PINK_CONCRETE),
+            new ItemStack(Material.GRAY_CONCRETE),
+            new ItemStack(Material.LIGHT_GRAY_CONCRETE),
+            new ItemStack(Material.CYAN_CONCRETE),
+            new ItemStack(Material.PURPLE_CONCRETE),
+            new ItemStack(Material.BLUE_CONCRETE),
+            new ItemStack(Material.BROWN_CONCRETE),
+            new ItemStack(Material.GREEN_CONCRETE),
+            new ItemStack(Material.RED_CONCRETE),
+            new ItemStack(Material.BLACK_CONCRETE)
+    };
 
     public ColorsGUI(int page) {
         // Construct the Inventory
@@ -61,7 +80,7 @@ public class ColorsGUI implements InventoryHolder {
         ItemStack left = null;
         ItemStack right = null;
 
-        if (page <= 0) {
+        if (page == 0) {
             left = new ItemStack(Material.RED_STAINED_GLASS_PANE);
             right = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
 
@@ -78,20 +97,38 @@ public class ColorsGUI implements InventoryHolder {
                 inv.setItem(i, allWools[i]);
             }
         }
-        if (page >= 1) {
+        if (page == 1) {
             left = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
-            right = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+            right = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
 
             ItemMeta leftMeta = left.getItemMeta();
             leftMeta.setDisplayName(ChatColor.GREEN + "PREVIOUS PAGE");
             left.setItemMeta(leftMeta);
 
             ItemMeta rightMeta = right.getItemMeta();
-            rightMeta.setDisplayName(ChatColor.RED + "NEXT PAGE");
+            rightMeta.setDisplayName(ChatColor.GREEN + "NEXT PAGE");
             right.setItemMeta(rightMeta);
 
             for (int i = 0; i < allTerracottas.length; i++){
                 inv.setItem(i, allTerracottas[i]);
+            }
+        }
+        if (page == 2){
+            left = new ItemStack(Material.GREEN_STAINED_GLASS_PANE);
+            right = new ItemStack(Material.RED_STAINED_GLASS_PANE);
+
+            ItemMeta leftMeta = left.getItemMeta();
+            leftMeta.setDisplayName(ChatColor.GREEN + "PREVIOUS PAGE");
+
+            left.setItemMeta(leftMeta);
+
+            ItemMeta rightMeta = right.getItemMeta();
+            rightMeta.setDisplayName(ChatColor.RED + "NEXT PAGE");
+
+            right.setItemMeta(rightMeta);
+
+            for (int i = 0; i < allConcretes.length; i++){
+                inv.setItem(i, allConcretes[i]);
             }
         }
 
@@ -103,4 +140,5 @@ public class ColorsGUI implements InventoryHolder {
     public Inventory getInventory() {
         return inv;
     }
+
 }

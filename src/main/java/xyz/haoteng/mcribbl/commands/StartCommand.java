@@ -7,7 +7,9 @@ import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rectangle;
 
@@ -42,7 +44,7 @@ public class StartCommand implements CommandExecutor {
         Player player = (Player) sender;
 
         //Get CornerBlocks & Setup Drawing Board
-        Block[] cornerBlocks = getTwoCornerBlocks(player.getLocation(), 5, 10);
+        Block[] cornerBlocks = getTwoCornerBlocks(player.getLocation(), 5, 16);
         Rectangle boardArea = new Rectangle(cornerBlocks[0].getLocation(), cornerBlocks[1].getLocation());
         boardArea.changeAllMaterial(Material.QUARTZ_BLOCK, false);
 
@@ -55,6 +57,11 @@ public class StartCommand implements CommandExecutor {
         //Give the player two prompts to choose from
         String[] twoPrompts = shuffleAndGetPrompts();
         player.sendMessage(ChatColor.GREEN + "Draw: " + ChatColor.GRAY + twoPrompts[0] + ChatColor.GOLD + " or " + ChatColor.GRAY + twoPrompts[1]);
+
+        //Modify the player's inventory
+        player.getInventory().clear();
+        player.getInventory().setItem(0, new ItemStack(Material.STICK));
+        player.getInventory().setItem(1, new ItemStack(Material.SNOWBALL));
 
         return true;
     }

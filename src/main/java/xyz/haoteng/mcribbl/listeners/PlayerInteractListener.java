@@ -25,7 +25,21 @@ public class PlayerInteractListener implements Listener {
             Block targetedBlock = player.getTargetBlock(null, 20);
             if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
                 targetedBlock.setType(ColorCommand.selectedColorBlock.getType());
+                //Run reset command to make sure the block does not get restored
                 PlayerMoveListener.reset();
+            }
+        }
+
+        //If the interact event is initialized with a snowball
+        if (e.getMaterial() == Material.SNOWBALL){
+            e.setCancelled(true);
+
+            Block targetedBlock = player.getTargetBlock(null, 20);
+            if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK){
+                targetedBlock.setType(Material.QUARTZ_BLOCK);
+                PlayerMoveListener.reset();
+
+                //Issue: Previous cursor preview block may not reset property, causing the preview block to stay in the board permanently
             }
         }
     }

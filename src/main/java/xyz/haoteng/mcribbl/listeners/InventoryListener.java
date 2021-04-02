@@ -26,10 +26,10 @@ public class InventoryListener implements Listener {
 
             if (item.getType() == Material.GREEN_STAINED_GLASS_PANE) {
                 if (e.getRawSlot() == 16) {
-                    player.openInventory(new ColorsGUI(0).getInventory());
+                    player.openInventory(new ColorsGUI(ColorsGUI.page - 1).getInventory());
                     return;
                 } else if (e.getRawSlot() == 17) {
-                    player.openInventory(new ColorsGUI(1).getInventory());
+                    player.openInventory(new ColorsGUI(ColorsGUI.page + 1).getInventory());
                     return;
                 }
             } else if (item.getType() == Material.RED_STAINED_GLASS_PANE){
