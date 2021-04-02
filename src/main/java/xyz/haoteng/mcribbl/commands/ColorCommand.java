@@ -15,7 +15,7 @@ public class ColorCommand implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
 
-        ColorsGUI colorsGUI = new ColorsGUI();
+        ColorsGUI colorsGUI = new ColorsGUI(0);
         player.openInventory(colorsGUI.getInventory());
 
         return false;
