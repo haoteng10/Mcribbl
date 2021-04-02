@@ -12,11 +12,14 @@ import xyz.haoteng.mcribbl.gui.ColorsGUI;
 public class InventoryListener implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e){
+        //Get the player that clicked something in the inventory
         Player player = (Player) e.getWhoClicked();
+        //Get the item that has been clicked
         ItemStack item = e.getCurrentItem();
 
         if (item == null) return;
 
+        //If the inventory belongs to ColorsGUI
         if (e.getClickedInventory().getHolder() instanceof ColorsGUI) {
             e.setCancelled(true);
             ColorCommand.selectedColorBlock = item;

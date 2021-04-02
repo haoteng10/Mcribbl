@@ -10,26 +10,17 @@ import java.util.List;
 public class Score {
     private Player holder;
     private int totalScore;
-    private int[] scoreCasts;
-    private List<Integer> scoreCastsList;
+    private List<Integer> scoreCasts;
 
     public Score(Player holder){
         this.holder = holder;
         totalScore = 0;
-        scoreCastsList = new ArrayList<Integer>();
+        scoreCasts = new ArrayList<Integer>();
     }
 
     public void addScore(int score){
-        scoreCastsList.add(score);
+        scoreCasts.add(score);
         totalScore += score;
-        convertListToArray();
-    }
-
-    public void convertListToArray(){
-        scoreCasts = new int[scoreCastsList.size()];
-        for (int i = 0; i < scoreCastsList.size(); i++){
-            scoreCasts[i] = scoreCastsList.get(i);
-        }
     }
 
     public int getTotalScore() {
@@ -37,7 +28,7 @@ public class Score {
     }
 
     public double averageScore(){
-        return (double) totalScore / scoreCasts.length;
+        return (double) totalScore / scoreCasts.size();
     }
 
     /**
@@ -52,16 +43,16 @@ public class Score {
      * @return the mode of the scores in scoreCasts array
      */
     public int modeScore(){
-        int currentMode = scoreCasts[0];
+        int currentMode = scoreCasts.get(0);
         int currentModeOccurrences = 1;
 
-        for (int i = 0; i < scoreCasts.length; i++){
+        for (int i = 0; i < scoreCasts.size(); i++){
             int selectedOccurrence = 0;
-            for (int j = i; j < scoreCasts.length; j++){
-                if (scoreCasts[j] == scoreCasts[i]) selectedOccurrence++;
+            for (int j = i; j < scoreCasts.size(); j++){
+                if (scoreCasts.get(j) == scoreCasts.get(i)) selectedOccurrence++;
             }
             if (selectedOccurrence > currentModeOccurrences) {
-                currentMode = scoreCasts[i];
+                currentMode = scoreCasts.get(i);
                 currentModeOccurrences = selectedOccurrence;
             }
         }
@@ -70,9 +61,9 @@ public class Score {
     }
 
     public int maxCastScore(){
-        if (scoreCasts.length == 0) return -1;
+        if (scoreCasts.size() == 0) return -1;
 
-        int currentMax = scoreCasts[0];
+        int currentMax = scoreCasts.get(0);
         for (int number : scoreCasts){
             if (number > currentMax) currentMax = number;
         }
@@ -80,9 +71,9 @@ public class Score {
     }
 
     public int minCastScore(){
-        if (scoreCasts.length == 0) return -1;
+        if (scoreCasts.size() == 0) return -1;
 
-        int currentMin = scoreCasts[0];
+        int currentMin = scoreCasts.get(0);
         for (int number : scoreCasts){
             if (number < currentMin) currentMin = number;
         }
@@ -90,7 +81,7 @@ public class Score {
     }
 
     public boolean anyEvenNumber(){
-        if (scoreCasts.length == 0) return false;
+        if (scoreCasts.size() == 0) return false;
 
         for (int number : scoreCasts){
             if (number % 2 == 0){
@@ -101,7 +92,7 @@ public class Score {
     }
 
     public boolean allEvenNumber(){
-        if (scoreCasts.length == 0) return false;
+        if (scoreCasts.size() == 0) return false;
 
         for (int number : scoreCasts){
             if (number % 2 != 0){
@@ -129,9 +120,9 @@ public class Score {
     }
 
     public boolean hasSimilarCastScores(){
-        for (int i = 0; i < scoreCasts.length; i++){
-            for (int j = i+1; j < scoreCasts.length; j++){
-                if (scoreCasts[i] == scoreCasts[j]) return true;
+        for (int i = 0; i < scoreCasts.size(); i++){
+            for (int j = i+1; j < scoreCasts.size(); j++){
+                if (scoreCasts.get(i) == scoreCasts.get(j)) return true;
             }
         }
         return false;
