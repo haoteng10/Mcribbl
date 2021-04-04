@@ -6,23 +6,27 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.haoteng.mcribbl.helpers.Message;
-import xyz.haoteng.mcribbl.models.Score;
+import xyz.haoteng.mcribbl.models.Rating;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class RatingCommand implements CommandExecutor {
 
-    private static List<Score> allScores = new ArrayList<Score>();
+//    private static List<Rating> allRatings = new ArrayList<Rating>();
+
+    public static HashMap<Player, ArrayList<Rating>> allPlayerRatings = new HashMap<>();
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         // Command that looks like this --> /rating player [player name]
         if (args.length == 2 && args[0].equals("player")) {
-            if (getPlayerScoreFromList(args[1]) != null) {
-                Score playerScore = getPlayerScoreFromList(args[1]);
-                displayPlayerScore(playerScore, sender);
+            if (getLatestPlayerRating(args[1]) != null) {
+                Rating playerRating = getLatestPlayerRating(args[1]);
+                displayPlayerScore(playerRating, sender);
             } else {
                 sendInvalidMessage(sender);
                 return false;
@@ -41,9 +45,9 @@ public class RatingCommand implements CommandExecutor {
                 return false;
             }
 
-            if (getPlayerScoreFromList(args[1]) != null && check < 10 && check >= 0) {
-                Score playerScore = getPlayerScoreFromList(args[1]);
-                boolean hasTargetInt = playerScore.scoreHasCertainDigit(check);
+            if (getLatestPlayerRating(args[1]) != null && check < 10 && check >= 0) {
+                Rating playerRating = getLatestPlayerRating(args[1]);
+                boolean hasTargetInt = playerRating.scoreHasCertainDigit(check);
                 sender.sendMessage("" + ChatColor.GOLD + ChatColor.BOLD + check + ChatColor.RESET + ChatColor.GOLD + " is one of the digit(s) in the final score: " + ChatColor.DARK_AQUA + hasTargetInt);
             } else {
                 Message invUsg = new Message();
@@ -59,8 +63,8 @@ public class RatingCommand implements CommandExecutor {
             if (!(sender instanceof Player)) return false;
 
             Player player = (Player) sender;
-            if (getPlayerScoreFromList(player.getName()) != null){
-                displayPlayerScore(getPlayerScoreFromList(player.getName()), player);
+            if (getLatestPlayerRating(player) != null){
+                displayPlayerScore(getLatestPlayerRating(player), player);
             } else {
                 sendInvalidMessage(player);
                 return false;
@@ -70,22 +74,33 @@ public class RatingCommand implements CommandExecutor {
         return true;
     }
 
-    private void displayPlayerScore(Score playerScore, CommandSender sender){
-        playerScore.printScore(sender);
+    private void displayPlayerScore(Rating playerRating, CommandSender sender){
+        playerRating.printScore(sender);
     }
 
-    public static void addPlayerScore(Score score){
-        allScores.add(score);
+    public static void addPlayerScore(Rating rating){
+//        allRatings.add(rating);
+        Player player = rating.getHolder();
+        ArrayList<Rating> currentPlayerRatings = allPlayerRatings.get(player);
+        currentPlayerRatings.add(rating);
+        allPlayerRatings.put(player, currentPlayerRatings);
     }
 
-    public static Score getPlayerScoreFromList(String playerName){
-        Score latestScore = null;
-        for (Score score : allScores){
-            if (score.getHolder().getName().equals(playerName)){
-                latestScore = score;
+    //Get the latest player rating from the hashmap of player ratings in an arraylist
+    public static Rating getLatestPlayerRating(Player player){
+        ArrayList<Rating> ratings = allPlayerRatings.get(player);
+        if (ratings.size() <= 0) return null;
+        return ratings.get(ratings.size()-1);
+    }
+
+    //Overload the method to allow using player names instead of player object
+    public static Rating getLatestPlayerRating(String playerName){
+        for (Player i : allPlayerRatings.keySet()){
+            if (i.getName().equals(playerName)) {
+                return getLatestPlayerRating(i);
             }
         }
-        return latestScore;
+        return null;
     }
 
     private void sendInvalidMessage(CommandSender sender){

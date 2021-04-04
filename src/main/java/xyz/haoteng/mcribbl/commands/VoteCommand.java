@@ -7,11 +7,11 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import xyz.haoteng.mcribbl.helpers.Message;
-import xyz.haoteng.mcribbl.models.Score;
+import xyz.haoteng.mcribbl.models.Rating;
 
 public class VoteCommand implements CommandExecutor {
     public static boolean enabled = false;
-    public static Score currentPlayerScore;
+    public static Rating currentPlayerRating;
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -46,7 +46,7 @@ public class VoteCommand implements CommandExecutor {
         }
 
         //Add individual casts to the player score
-        currentPlayerScore.addScore(score);
+        currentPlayerRating.addScore(score);
 
         //Send message
         player.sendMessage(ChatColor.GOLD + "You voted: "+ ChatColor.BOLD + score);
@@ -63,7 +63,7 @@ public class VoteCommand implements CommandExecutor {
             iPlayer.sendMessage(ChatColor.DARK_GREEN + ">>> " + ChatColor.GOLD + "Voting starts now! \n" + ChatColor.DARK_GREEN + ">>> " + ChatColor.AQUA + "Please rank from 1 (worst) to 5 (best)" + ChatColor.DARK_AQUA + "\n/vote [1 to 5]");
         }
 
-        currentPlayerScore = new Score(player);
+        currentPlayerRating = new Rating(player);
     }
 
     public static void endVoting(){
@@ -77,10 +77,10 @@ public class VoteCommand implements CommandExecutor {
         }
 
         //Add the score to the global ratings
-        RatingCommand.addPlayerScore(currentPlayerScore);
+        RatingCommand.addPlayerScore(currentPlayerRating);
 
-        //Reset the current player scoreboard
-        currentPlayerScore = null;
+        //Clear current player rating
+        currentPlayerRating = null;
     }
 
     private void sendInvalidMessage(Player player){

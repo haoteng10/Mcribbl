@@ -7,12 +7,12 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Score {
+public class Rating {
     private Player holder;
     private int totalScore;
     private List<Integer> scoreCasts;
 
-    public Score(Player holder){
+    public Rating(Player holder){
         this.holder = holder;
         totalScore = 0;
         scoreCasts = new ArrayList<Integer>();
