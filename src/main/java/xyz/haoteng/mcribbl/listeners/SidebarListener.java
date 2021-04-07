@@ -11,7 +11,6 @@ import xyz.haoteng.mcribbl.commands.RatingCommand;
 import xyz.haoteng.mcribbl.models.Rating;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class SidebarListener implements Listener {
 
@@ -25,44 +24,69 @@ public class SidebarListener implements Listener {
         Objective obj = board.registerNewObjective("vote count", "player rating", ChatColor.GOLD + "Mcribbl Battle");
         obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 
-        //Line 6 (1st place)
+        ArrayList<Player> topPlayers = RatingCommand.getTopPlayers();
+
+        //Line 7 (1st place)
         Team place1 = board.registerNewTeam("place1");
         place1.addEntry(ChatColor.GREEN.toString());
         place1.setPrefix(ChatColor.YELLOW + "1. " + ChatColor.GOLD);
-        place1.setSuffix(" " + ChatColor.DARK_AQUA + "0");
-        obj.getScore(ChatColor.GREEN.toString()).setScore(6);
+        try {
+            place1.setSuffix(topPlayers.get(0).getName());
+        } catch (Exception error){
+            place1.setSuffix("");
+        }
+        obj.getScore(ChatColor.GREEN.toString()).setScore(7);
 
-        //Line 5 (2nd place)
+        //Line 6 (2nd place)
         Team place2 = board.registerNewTeam("place2");
         place2.addEntry(ChatColor.GRAY.toString());
         place2.setPrefix(ChatColor.YELLOW + "2. " + ChatColor.GOLD);
-        place2.setSuffix(" " + ChatColor.DARK_AQUA + "0");
-        obj.getScore(ChatColor.GRAY.toString()).setScore(5);
+        try {
+            place2.setSuffix(topPlayers.get(1).getName());
+        } catch (Exception error) {
+            place2.setSuffix("");
+        }
+        obj.getScore(ChatColor.GRAY.toString()).setScore(6);
 
-        //Line 4 (3rd place)
+        //Line 5 (3rd place)
         Team place3 = board.registerNewTeam("place3");
         place3.addEntry(ChatColor.WHITE.toString());
         place3.setPrefix(ChatColor.YELLOW + "3. " + ChatColor.GOLD);
-        place3.setSuffix(" " + ChatColor.DARK_AQUA + "0");
-        obj.getScore(ChatColor.WHITE.toString()).setScore(4);
+        try {
+            place3.setSuffix(topPlayers.get(2).getName());
+        } catch (Exception error) {
+            place3.setSuffix("");
+        }
+        obj.getScore(ChatColor.WHITE.toString()).setScore(5);
+
+        //Line 4
+        Score lineBreak = obj.getScore("============");
+        lineBreak.setScore(4);
 
         //Line 3
-        Score lineBreak = obj.getScore("=========");
-        lineBreak.setScore(3);
-
-        //Line 2
         Team currentRating = board.registerNewTeam("rating");
         currentRating.addEntry(ChatColor.BLACK.toString());
         currentRating.setPrefix(ChatColor.YELLOW + "Latest: ");
 
         Rating playerRating = RatingCommand.getLatestPlayerRating(player);
+        String latestScore = "";
+
         if (playerRating != null) {
-            currentRating.setSuffix(ChatColor.DARK_AQUA + "" + playerRating.getTotalScore());
+            latestScore += playerRating.getTotalScore();
         } else {
-            currentRating.setSuffix(ChatColor.DARK_AQUA + "" + 0);
+            latestScore += "0";
         }
 
-        obj.getScore(ChatColor.BLACK.toString()).setScore(2);
+        currentRating.setSuffix(latestScore);
+
+        obj.getScore(ChatColor.BLACK.toString()).setScore(3);
+
+        //Line 2
+        Team allRatings = board.registerNewTeam("all rating");
+        allRatings.addEntry(ChatColor.DARK_AQUA.toString());
+        allRatings.setPrefix(ChatColor.YELLOW + "Total: ");
+        allRatings.setSuffix(RatingCommand.getTotalScore(player) + "");
+        obj.getScore(ChatColor.DARK_AQUA.toString()).setScore(2);
 
         //Line 1
         Score playerName = obj.getScore(ChatColor.LIGHT_PURPLE + "Player: " + ChatColor.AQUA + player.getName());

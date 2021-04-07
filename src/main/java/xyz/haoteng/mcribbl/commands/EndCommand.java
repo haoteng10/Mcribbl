@@ -8,9 +8,13 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.util.Vector;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rating;
+
+import java.util.ArrayList;
 
 public class EndCommand implements CommandExecutor {
     @Override
@@ -34,9 +38,37 @@ public class EndCommand implements CommandExecutor {
                 firework.setFireworkMeta(fwmeta);
             }
 
-            //Refresh the player's sidebar
-            Rating playerRating = RatingCommand.getLatestPlayerRating(player); //Assuming the player is ending it, not someone else
-            player.getScoreboard().getTeam("rating").setSuffix(ChatColor.BLUE + "" + playerRating.getTotalScore());
+            //Refresh players' sidebar
+            for (Player p : Bukkit.getOnlinePlayers()) {
+
+                Scoreboard playerBoard = p.getScoreboard();
+
+                Rating playerRating = RatingCommand.getLatestPlayerRating(p);
+                playerBoard.getTeam("rating").setSuffix(playerRating.getTotalScore() + "");
+                playerBoard.getTeam("all rating").setSuffix(RatingCommand.getTotalScore(p) + "");
+
+                ArrayList<Player> topPlayers = RatingCommand.getTopPlayers();
+                Team place1 = playerBoard.getTeam("place1");
+                try {
+                    place1.setSuffix(topPlayers.get(0).getName());
+                } catch (Exception error){
+                    place1.setSuffix("");
+                }
+
+                Team place2 = playerBoard.getTeam("place2");
+                try {
+                    place2.setSuffix(topPlayers.get(1).getName());
+                } catch (Exception error) {
+                    place2.setSuffix("");
+                }
+
+                Team place3 = playerBoard.getTeam("place3");
+                try {
+                    place3.setSuffix(topPlayers.get(2).getName());
+                } catch (Exception error) {
+                    place3.setSuffix("");
+                }
+            }
         }
 
         return true;

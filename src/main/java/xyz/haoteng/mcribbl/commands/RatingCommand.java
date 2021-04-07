@@ -103,6 +103,56 @@ public class RatingCommand implements CommandExecutor {
         return null;
     }
 
+    //Get the total score of ALL of the ratings of a player
+    public static int getTotalScore(Player player){
+        ArrayList<Rating> ratings = allPlayerRatings.get(player);
+        int score = 0;
+        for (Rating rating : ratings){
+            score += rating.getTotalScore();
+        }
+        return score;
+    }
+
+    //Get the top 3 players using the total scores of all rounds
+    public static ArrayList<Player> getTopPlayers(){
+        ArrayList<Player> allPlayers = new ArrayList<>();
+        ArrayList<Player> topPlayers = new ArrayList<>();
+
+        for (Player i : allPlayerRatings.keySet()){
+            allPlayers.add(i);
+        }
+
+        for (int i = 0; i < allPlayers.size(); i++){
+            int lessThanNo = 0;
+            for (int j = i + 1; j < allPlayers.size(); j++){
+                if (RatingCommand.getTotalScore(allPlayers.get(i)) < RatingCommand.getTotalScore(allPlayers.get(j))){
+                    lessThanNo++;
+                }
+            }
+
+            if (lessThanNo <= 2) {
+                topPlayers.add(allPlayers.get(i));
+            }
+        }
+
+        //Selection Sort
+        for (int i = 0; i < topPlayers.size(); i++){
+            int currentMax = i;
+
+            for (int j = i+1; j < topPlayers.size(); j++){
+                if (RatingCommand.getTotalScore(topPlayers.get(currentMax)) < RatingCommand.getTotalScore(topPlayers.get(j))){
+                    currentMax = j;
+                }
+            }
+
+            Player temp = topPlayers.get(i);
+            topPlayers.set(i, topPlayers.get(currentMax));
+            topPlayers.set(currentMax, temp);
+        }
+
+        return topPlayers;
+    }
+
     private void sendInvalidMessage(CommandSender sender){
         Message invUsg = new Message();
         invUsg.setCommandTemplate("/rating player [player name]");
