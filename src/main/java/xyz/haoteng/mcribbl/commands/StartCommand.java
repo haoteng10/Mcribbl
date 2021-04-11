@@ -1,19 +1,25 @@
 package xyz.haoteng.mcribbl.commands;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
+import xyz.haoteng.mcribbl.Game;
+import xyz.haoteng.mcribbl.Mcribbl;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rectangle;
 
 public class StartCommand implements CommandExecutor {
+
+    private BukkitTask task;
 
     private static String[] prompts = {
             "Apple",
@@ -22,6 +28,8 @@ public class StartCommand implements CommandExecutor {
             "Stick Figure",
             "School"
     };
+
+    private Location playerLocation;
 
     /**
      * Executes the given command, returning its success.
@@ -42,6 +50,7 @@ public class StartCommand implements CommandExecutor {
         }
 
         Player player = (Player) sender;
+        playerLocation = player.getLocation();
 
         //Get CornerBlocks & Setup Drawing Board
         Block[] cornerBlocks = getTwoCornerBlocks(player.getLocation(), 5, 16);
@@ -63,7 +72,41 @@ public class StartCommand implements CommandExecutor {
         player.getInventory().setItem(0, new ItemStack(Material.STICK));
         player.getInventory().setItem(1, new ItemStack(Material.SNOWBALL));
 
+        //Play music
+        player.playEffect(playerLocation, Effect.RECORD_PLAY, Material.MUSIC_DISC_CHIRP);
+
+        //Start the timer & initialize the Bossbar
+        initBossbarAndTimer(48, player);
+
         return true;
+    }
+
+    private void initBossbarAndTimer(int ticks, Player player){
+        BossBar bossBar = Bukkit.createBossBar(ChatColor.GOLD + "Countdown", BarColor.YELLOW, BarStyle.SEGMENTED_12);
+        if (task == null){
+            task = new BukkitRunnable(){
+                int seconds = ticks / 4;
+                @Override
+                public void run() {
+                    seconds -= 1;
+                    if (seconds == 0) {
+                        task.cancel();
+                        bossBar.removeAll();
+
+                        //End session
+                        Game.endGame(player);
+
+                        player.getWorld().playEffect(playerLocation, Effect.RECORD_PLAY, 0);
+                    } else {
+                        bossBar.setProgress(seconds / (double) 12);
+                    }
+                }
+            }.runTaskTimer(Mcribbl.plugin, 0, ticks);
+        }
+        bossBar.setVisible(true);
+        for (Player p : Bukkit.getOnlinePlayers()){
+            bossBar.addPlayer(p);
+        }
     }
 
 

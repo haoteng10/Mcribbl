@@ -1,6 +1,7 @@
 package xyz.haoteng.mcribbl;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import xyz.haoteng.mcribbl.commands.*;
 import xyz.haoteng.mcribbl.listeners.InventoryListener;
@@ -9,9 +10,12 @@ import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.listeners.SidebarListener;
 
 public final class Mcribbl extends JavaPlugin {
+    public static Mcribbl plugin;
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         // Initialize Commands
         this.getCommand("color").setExecutor(new ColorCommand());
         this.getCommand("start").setExecutor(new StartCommand());
