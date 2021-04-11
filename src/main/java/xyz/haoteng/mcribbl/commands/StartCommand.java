@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitTask;
 import xyz.haoteng.mcribbl.Game;
 import xyz.haoteng.mcribbl.Mcribbl;
 import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
-import xyz.haoteng.mcribbl.models.Rectangle;
+import xyz.haoteng.mcribbl.models.Cuboid;
 
 public class StartCommand implements CommandExecutor {
 
@@ -52,9 +52,12 @@ public class StartCommand implements CommandExecutor {
         Player player = (Player) sender;
         playerLocation = player.getLocation();
 
+        //Save the player's location for later use
+        Game.addPlayerLocation(player, playerLocation);
+
         //Get CornerBlocks & Setup Drawing Board
         Block[] cornerBlocks = getTwoCornerBlocks(player.getLocation(), 5, 16);
-        Rectangle boardArea = new Rectangle(cornerBlocks[0].getLocation(), cornerBlocks[1].getLocation());
+        Cuboid boardArea = new Cuboid(cornerBlocks[0].getLocation(), cornerBlocks[1].getLocation());
         boardArea.changeAllMaterial(Material.QUARTZ_BLOCK, false);
 
         //Setup Player Cursor
@@ -83,26 +86,27 @@ public class StartCommand implements CommandExecutor {
 
     private void initBossbarAndTimer(int ticks, Player player){
         BossBar bossBar = Bukkit.createBossBar(ChatColor.GOLD + "Countdown", BarColor.YELLOW, BarStyle.SEGMENTED_12);
-        if (task == null){
-            task = new BukkitRunnable(){
-                int seconds = ticks / 4;
-                @Override
-                public void run() {
-                    seconds -= 1;
-                    if (seconds == 0) {
-                        task.cancel();
-                        bossBar.removeAll();
 
-                        //End session
-                        Game.endGame(player);
+        task = new BukkitRunnable(){
+            int seconds = ticks / 4;
+            @Override
+            public void run() {
+                seconds -= 1;
+                if (seconds == 0) {
+                    task.cancel();
+                    bossBar.removeAll();
 
-                        player.getWorld().playEffect(playerLocation, Effect.RECORD_PLAY, 0);
-                    } else {
-                        bossBar.setProgress(seconds / (double) 12);
-                    }
+                    //End session
+                    Game.end(player);
+
+                    //End record disc from playing
+                    player.getWorld().playEffect(playerLocation, Effect.RECORD_PLAY, 0);
+                } else {
+                    bossBar.setProgress(seconds / (double) 12);
                 }
-            }.runTaskTimer(Mcribbl.plugin, 0, ticks);
-        }
+            }
+        }.runTaskTimer(Mcribbl.plugin, 0, ticks);
+
         bossBar.setVisible(true);
         for (Player p : Bukkit.getOnlinePlayers()){
             bossBar.addPlayer(p);

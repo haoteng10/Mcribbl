@@ -8,14 +8,10 @@ import org.bukkit.entity.Player;
 import xyz.haoteng.mcribbl.helpers.Message;
 import xyz.haoteng.mcribbl.models.Rating;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class RatingCommand implements CommandExecutor {
-
-//    private static List<Rating> allRatings = new ArrayList<Rating>();
 
     public static HashMap<Player, ArrayList<Rating>> allPlayerRatings = new HashMap<>();
 

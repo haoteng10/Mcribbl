@@ -5,22 +5,27 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class Rating {
     private Player holder;
     private int totalScore;
-    private List<Integer> scoreCasts;
+    private ArrayList<Integer> scoreCasts;
 
     public Rating(Player holder){
         this.holder = holder;
         totalScore = 0;
-        scoreCasts = new ArrayList<Integer>();
+        scoreCasts = new ArrayList<>();
     }
 
     public void addScore(int score){
-        scoreCasts.add(score);
+        scoreCasts.add(0, score);
         totalScore += score;
+    }
+
+    public void doubleScore(){
+        boolean result  = scoreCasts.add(totalScore);
+        totalScore += totalScore;
+        System.out.println("Doubling score: " + result);
     }
 
     public int getTotalScore() {

@@ -3,9 +3,12 @@ package xyz.haoteng.mcribbl;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
+import org.bukkit.Location;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import xyz.haoteng.mcribbl.commands.RatingCommand;
@@ -14,30 +17,61 @@ import xyz.haoteng.mcribbl.listeners.PlayerMoveListener;
 import xyz.haoteng.mcribbl.models.Rating;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Game {
 
-    public static void endGame(Player player){
+    private static BukkitTask task;
+
+    private static HashMap<Player, Location> playerLocations = new HashMap<>();
+
+    public static BonusMatch playerBonus;
+
+    public static void end(Player player){
         //End the voting session
         VoteCommand.endVoting();
 
         //End the player cursor
         PlayerMoveListener.toggleEnabled();
-        //Spawn some fireworks!!!
-        for (int i = 0; i < 3; i++){
-            Firework firework = player.getWorld().spawn(player.getLocation(), Firework.class);
-            FireworkMeta fwmeta = firework.getFireworkMeta();
-            fwmeta.addEffects(FireworkEffect.builder().withColor(Color.TEAL).withColor(Color.GREEN).with(FireworkEffect.Type.STAR).withTrail().build());
-            fwmeta.setPower(1);
-            firework.setFireworkMeta(fwmeta);
-        }
 
+        //Spawn some fireworks!!!
+        task = new BukkitRunnable(){
+            int seconds = 5;
+            @Override
+            public void run() {
+                seconds--;
+
+                Firework firework = player.getWorld().spawn(player.getLocation(), Firework.class);
+                FireworkMeta fwmeta = firework.getFireworkMeta();
+                fwmeta.addEffects(FireworkEffect.builder().withColor(Color.TEAL).withColor(Color.GREEN).with(FireworkEffect.Type.STAR).withTrail().build());
+                fwmeta.setPower(1);
+                firework.setFireworkMeta(fwmeta);
+
+                if (seconds == 0){
+                    task.cancel();
+                }
+            }
+        }.runTaskTimer(Mcribbl.plugin, 0,20);
+
+        //Bonus Match
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(Mcribbl.plugin, new Runnable() {
+            @Override
+            public void run() {
+                playerBonus = new BonusMatch(player);
+                playerBonus.start();
+            }
+        }, 104);
+
+    }
+
+    public static void refreshSidebar(){
         //Refresh players' sidebar
         for (Player p : Bukkit.getOnlinePlayers()) {
 
             Scoreboard playerBoard = p.getScoreboard();
 
             Rating playerRating = RatingCommand.getLatestPlayerRating(p);
+
             playerBoard.getTeam("rating").setSuffix(playerRating.getTotalScore() + "");
             playerBoard.getTeam("all rating").setSuffix(RatingCommand.getTotalScore(p) + "");
 
@@ -63,5 +97,13 @@ public class Game {
                 place3.setSuffix("");
             }
         }
+    }
+
+    public static void addPlayerLocation(Player player, Location loc){
+        playerLocations.put(player, loc);
+    }
+
+    public static Location getPlayerLocation(Player player){
+        return playerLocations.get(player);
     }
 }
