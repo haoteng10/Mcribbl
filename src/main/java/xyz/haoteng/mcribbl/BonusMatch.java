@@ -44,7 +44,16 @@ public class BonusMatch {
             }
             System.out.println();
         }
+        System.out.println("==========");
 
+        for (int col = 0; col < flr[0].length; col++){
+            for (int row = 0; row < flr.length; row++){
+                System.out.print(flr[row][col] + " ");
+            }
+            System.out.println();
+        }
+
+        //Change the material of one side of the arena
         arena.changeSideMaterial(flr, Material.GLOWSTONE);
 
         //Teleport the player

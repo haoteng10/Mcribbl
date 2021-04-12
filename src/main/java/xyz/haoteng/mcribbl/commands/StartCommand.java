@@ -79,13 +79,13 @@ public class StartCommand implements CommandExecutor {
         player.playEffect(playerLocation, Effect.RECORD_PLAY, Material.MUSIC_DISC_CHIRP);
 
         //Start the timer & initialize the Bossbar
-        initBossbarAndTimer(48, player);
+        initBossbarAndTimer(80, player);
 
         return true;
     }
 
     private void initBossbarAndTimer(int ticks, Player player){
-        BossBar bossBar = Bukkit.createBossBar(ChatColor.GOLD + "Countdown", BarColor.YELLOW, BarStyle.SEGMENTED_12);
+        BossBar bossBar = Bukkit.createBossBar(ChatColor.GOLD + "Countdown", BarColor.YELLOW, BarStyle.SOLID);
 
         task = new BukkitRunnable(){
             int seconds = ticks / 4;
@@ -102,7 +102,7 @@ public class StartCommand implements CommandExecutor {
                     //End record disc from playing
                     player.getWorld().playEffect(playerLocation, Effect.RECORD_PLAY, 0);
                 } else {
-                    bossBar.setProgress(seconds / (double) 12);
+                    bossBar.setProgress(seconds / (double) 20);
                 }
             }
         }.runTaskTimer(Mcribbl.plugin, 0, ticks);

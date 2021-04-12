@@ -15,3 +15,5 @@ commands:
     description: view voting results
   end:
     description: stop drawing & voting
+  music:
+    description: toggling pigstep music

@@ -92,12 +92,9 @@ public class Cuboid {
     public boolean changeSideMaterial(int[][] blueprint, Material material) {
 //        if (blueprint.length != getZWidth() || blueprint[0].length != getXWidth()) return false;
 
-        System.out.println("A");
-
         for (int row = 0; row < blueprint.length; row++){
             for (int col = 0; col < blueprint[row].length; col++){
                 if (blueprint[row][col] == 1) {
-                    System.out.println("B");
                     blockArray[row*blueprint.length+col].setType(material);
                 }
             }

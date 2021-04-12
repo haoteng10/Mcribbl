@@ -19,6 +19,7 @@ public final class Mcribbl extends JavaPlugin {
         this.getCommand("vote").setExecutor(new VoteCommand());
         this.getCommand("end").setExecutor(new EndCommand());
         this.getCommand("rating").setExecutor(new RatingCommand());
+        this.getCommand("music").setExecutor(new MusicCommand());
 
         // Initialize Listeners
         Bukkit.getPluginManager().registerEvents(new InventoryListener(), this);

@@ -10,6 +10,7 @@ import xyz.haoteng.mcribbl.models.Rating;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
 
 public class RatingCommand implements CommandExecutor {
 
@@ -112,38 +113,83 @@ public class RatingCommand implements CommandExecutor {
     //Get the top 3 players using the total scores of all rounds
     public static ArrayList<Player> getTopPlayers(){
         ArrayList<Player> allPlayers = new ArrayList<>();
-        ArrayList<Player> topPlayers = new ArrayList<>();
+        ArrayList<Player> allPlayers2 = new ArrayList<>();
 
         for (Player i : allPlayerRatings.keySet()){
             allPlayers.add(i);
+            allPlayers2.add(i);
         }
 
-        for (int i = 0; i < allPlayers.size(); i++){
-            int lessThanNo = 0;
-            for (int j = i + 1; j < allPlayers.size(); j++){
-                if (RatingCommand.getTotalScore(allPlayers.get(i)) < RatingCommand.getTotalScore(allPlayers.get(j))){
-                    lessThanNo++;
-                }
-            }
+//        for (int i = 0; i < allPlayers.size(); i++){
+//            int lessThanNo = 0;
+//            for (int j = i + 1; j < allPlayers.size(); j++){
+//                if (RatingCommand.getTotalScore(allPlayers.get(i)) < RatingCommand.getTotalScore(allPlayers.get(j))){
+//                    lessThanNo++;
+//                }
+//            }
+//
+//            if (lessThanNo <= 2) {
+//                topPlayers.add(allPlayers.get(i));
+//            }
+//        }
 
-            if (lessThanNo <= 2) {
-                topPlayers.add(allPlayers.get(i));
-            }
-        }
+        int selectionExecutionCount = 0;
+        int insertionExecutionCount = 0;
 
         //Selection Sort
-        for (int i = 0; i < topPlayers.size(); i++){
+        for (int i = 0; i < allPlayers.size(); i++){
             int currentMax = i;
 
-            for (int j = i+1; j < topPlayers.size(); j++){
-                if (RatingCommand.getTotalScore(topPlayers.get(currentMax)) < RatingCommand.getTotalScore(topPlayers.get(j))){
+            for (int j = i+1; j < allPlayers.size(); j++){
+                if (RatingCommand.getTotalScore(allPlayers.get(currentMax)) < RatingCommand.getTotalScore(allPlayers.get(j))){
                     currentMax = j;
                 }
+                selectionExecutionCount++;
             }
 
-            Player temp = topPlayers.get(i);
-            topPlayers.set(i, topPlayers.get(currentMax));
-            topPlayers.set(currentMax, temp);
+            Player temp = allPlayers.get(i);
+            allPlayers.set(i, allPlayers.get(currentMax));
+            allPlayers.set(currentMax, temp);
+        }
+
+        //Insertion Sort
+        for (int i = 1; i < allPlayers2.size(); i++){
+            int j = i-1;
+            Player p = allPlayers2.get(i);
+
+            while(j >= 0 && RatingCommand.getTotalScore(allPlayers2.get(j)) > RatingCommand.getTotalScore(p)){
+                allPlayers2.set(j+1, allPlayers2.get(j));
+                j--;
+                insertionExecutionCount++;
+            }
+
+            allPlayers2.set(j+1, p);
+        }
+
+        System.out.println("Selection Sort Execution Counts: " + selectionExecutionCount);
+        System.out.println(allPlayers);
+
+        System.out.println("Insertion Sort Execution Counts: " + insertionExecutionCount);
+        System.out.println(allPlayers2);
+
+        ArrayList<Player> topPlayers = new ArrayList<Player>();
+
+        try {
+            topPlayers.add(allPlayers.get(0));
+        } catch (Exception e){
+            System.out.println("Catch: " + e);
+        }
+
+        try {
+            topPlayers.add(allPlayers.get(1));
+        } catch (Exception e){
+            System.out.println("Catch: " + e);
+        }
+
+        try {
+            topPlayers.add(allPlayers.get(2));
+        } catch (Exception e){
+            System.out.println("Catch: " + e);
         }
 
         return topPlayers;
